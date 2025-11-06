@@ -1,28 +1,17 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 
-export default function CurrencyConverter() {
+function CurrencyConverter() {
   const [amount, setAmount] = useState(100);
   const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const fetchConversion = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const res= await axios.get(`http://localhost:3001/api/currency?amount=${amount}`);
-      setResult(res.data);
-    } catch {
-      setError("Error fetching currency data.");
-    } finally {
-      setLoading(false);
-    }
+  const convertCurrency = () => {
+    console.log("convertCurrency clicked for amount:", amount);
+    // Mock API response
+    const response = {
+      data: { amountINR: amount, usd: 1.12, eur: 0.98 }
+    };
+    setResult(response.data);
   };
-
-  useEffect(() => {
-    fetchConversion();
-  }, []);
 
   return (
     <div>
@@ -32,18 +21,17 @@ export default function CurrencyConverter() {
         value={amount}
         onChange={(e) => setAmount(e.target.value)}
       />
-      <button onClick={fetchConversion}>Convert</button>
-
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <button onClick={convertCurrency}>Convert</button>
 
       {result && (
-        <div>
-          <p><strong>INR:</strong> {result.amountINR}</p>
-          <p><strong>USD:</strong> {result.usd}</p>
-          <p><strong>EUR:</strong> {result.eur}</p>
+        <div style={{ marginTop: "10px" }}>
+          <p><b>INR:</b> {result.amountINR}</p>
+          <p><b>USD:</b> {result.usd}</p>
+          <p><b>EUR:</b> {result.eur}</p>
         </div>
       )}
     </div>
   );
 }
+
+export default CurrencyConverter;

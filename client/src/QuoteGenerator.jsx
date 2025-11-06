@@ -1,39 +1,29 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 
-export default function QuoteGenerator() {
-  const [quote, setQuote] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+function QuoteGenerator() {
+  const [quote, setQuote] = useState("");
 
-  const fetchQuote = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const res = await axios.get(`http://localhost:3001/api/quote`);
-      setQuote(res.data.quote);
-    } catch {
-      setError("Error fetching quote.");
-    } finally {
-      setLoading(false);
-    }
+  const getQuote = () => {
+    console.log("getQuote clicked");
+    // Mock API response
+    const response = {
+      data: { quote: { text: "Keep pushing forward.", author: "Unknown" } }
+    };
+    setQuote(response.data.quote);
   };
-
-  useEffect(() => {
-    fetchQuote();
-  }, []);
 
   return (
     <div>
       <h2>Motivational Quote</h2>
-      <button onClick={fetchQuote}>New Quote</button>
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <button onClick={getQuote}>New Quote</button>
+
       {quote && (
-        <blockquote>
-          "{quote.text}" - {quote.author}
-        </blockquote>
+        <p style={{ marginTop: "10px" }}>
+          “{quote.text}” — <i>{quote.author}</i>
+        </p>
       )}
     </div>
   );
 }
+
+export default QuoteGenerator;
